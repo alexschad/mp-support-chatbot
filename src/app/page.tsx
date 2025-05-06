@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, JSX } from "react";
+import useTypewriter from "@/hooks/useTypewriter";
 
 function TypingIndicator() {
     return (
@@ -30,12 +31,39 @@ function FallBackMessag() {
     );
 }
 
+const Typewriter = ({
+    text,
+    speed,
+    chatEndRef,
+}: {
+    text: string;
+    speed: number;
+    chatEndRef: React.RefObject<HTMLDivElement> | null;
+}) => {
+    const displayText = useTypewriter(text, speed);
+
+    // Scroll to bottom when new text appears
+    useEffect(() => {
+        if (chatEndRef && chatEndRef.current) {
+            chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [displayText, chatEndRef]);
+
+    return (
+        <div className="flex justify-start">
+            <div className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap">
+                {displayText}
+            </div>
+        </div>
+    );
+};
+
 export default function ChatPage() {
     const [messages, setMessages] = useState<
-        { role: string; content: string }[]
+        { role: string; content: string | JSX.Element }[]
     >([]);
-    const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [input, setInput] = useState("");
     const chatEndRef = useRef<HTMLDivElement>(null);
 
     const sendMessage = async () => {
@@ -101,6 +129,14 @@ export default function ChatPage() {
                                 {msg.content ===
                                 "Sorry I did not find a matching answer." ? (
                                     <FallBackMessag />
+                                ) : msg.role === "assistant" ? (
+                                    <Typewriter
+                                        text={msg.content as string}
+                                        speed={20}
+                                        chatEndRef={
+                                            chatEndRef as React.RefObject<HTMLDivElement>
+                                        }
+                                    />
                                 ) : (
                                     msg.content
                                 )}
