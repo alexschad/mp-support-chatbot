@@ -1,5 +1,6 @@
 import { OpenAI } from "openai";
 import clientPromise from "@/lib/mongodb"; // MongoDB connection helper
+import { logChatMessage } from "@/app/logChatMessage";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -57,6 +58,9 @@ export async function POST(req: Request) {
             },
         ],
     });
-
-    return Response.json({ answer: chatResponse.choices[0].message.content });
+    const answer = chatResponse.choices[0].message.content || "";
+    const answered = answer !== "Sorry I did not find a matching answer.";
+    // log the question to mongodb
+    logChatMessage({ question: query, answer, answered });
+    return Response.json({ answer });
 }
