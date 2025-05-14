@@ -40,11 +40,14 @@ async function fetchEntries(page: number, answered?: string) {
     return { entries, totalEntries };
 }
 
-export default async function Page({
-    searchParams,
-}: {
-    searchParams: { page?: string; answered?: string };
-}) {
+type PageProps = {
+    searchParams: {
+        page?: string;
+        answered?: string;
+    };
+};
+
+export default async function Page({ searchParams }: PageProps) {
     const { page: pageString, answered } = await searchParams;
     const page = parseInt(pageString || "1", 10);
     const { entries, totalEntries } = await fetchEntries(page, answered);
