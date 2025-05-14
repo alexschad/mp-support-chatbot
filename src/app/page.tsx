@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, JSX } from "react";
+import { useState, useRef, useEffect } from "react";
 import useTypewriter from "@/hooks/useTypewriter";
 
 function TypingIndicator() {
@@ -13,22 +13,42 @@ function TypingIndicator() {
     );
 }
 
-function FallBackMessag() {
-    return (
-        <span>
-            I&apos;m sorry, I couldn&apos;t find relevant information in the
-            documentation. You can try rephrasing your question or{" "}
-            <a
-                href="https://support.metropublisher.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 underline hover:text-indigo-800"
-            >
-                contact our support team
-            </a>{" "}
-            for further assistance.
-        </span>
-    );
+function FallBackMessage({ content }: { content: string }) {
+    if (content === "Sorry I did not find a matching answer.") {
+        return (
+            <span>
+                I&apos;m sorry, I couldn&apos;t find relevant information in the
+                documentation. You can try rephrasing your question or{" "}
+                <a
+                    href="https://support.metropublisher.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-600 underline hover:text-indigo-800"
+                >
+                    contact our support team
+                </a>{" "}
+                for further assistance.
+            </span>
+        );
+    } else {
+        return (
+            <span>
+                Es tut mir leid, ich konnte keine relevanten Informationen in
+                der Dokumentation finden. Du kannst versuchen, deine Frage
+                anders zu formulieren oder unser Support-Team für weitere Hilfe
+                zu{" "}
+                <a
+                    href="https://support.metropublisher.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-indigo-600 underline hover:text-indigo-800"
+                >
+                    kontaktieren
+                </a>
+                .
+            </span>
+        );
+    }
 }
 
 const Typewriter = ({
@@ -51,7 +71,7 @@ const Typewriter = ({
 
     return (
         <div className="flex justify-start">
-            <div className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap">
+            <div className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap break-words overflow-hidden w-full whitespace-normal">
                 {displayText}
             </div>
         </div>
@@ -60,7 +80,7 @@ const Typewriter = ({
 
 export default function ChatPage() {
     const [messages, setMessages] = useState<
-        { role: string; content: string | JSX.Element }[]
+        { role: string; content: string; answered: boolean }[]
     >([]);
     const [isLoading, setIsLoading] = useState(false);
     const [input, setInput] = useState("");
@@ -69,7 +89,7 @@ export default function ChatPage() {
     const sendMessage = async () => {
         if (!input.trim() || isLoading) return;
 
-        const userMessage = { role: "user", content: input };
+        const userMessage = { role: "user", content: input, answered: false };
         setMessages((prev) => [...prev, userMessage]);
         setInput("");
         setIsLoading(true);
@@ -85,13 +105,18 @@ export default function ChatPage() {
             const assistantMessage = {
                 role: "assistant",
                 content: data.answer,
+                answered: data.answered,
             };
             setMessages((prev) => [...prev, assistantMessage]);
         } catch (error) {
             console.error("Error fetching assistant response:", error);
             setMessages((prev) => [
                 ...prev,
-                { role: "assistant", content: "Sorry, something went wrong." },
+                {
+                    role: "assistant",
+                    content: "Sorry, something went wrong.",
+                    answered: false,
+                },
             ]);
         } finally {
             setIsLoading(false);
@@ -126,9 +151,8 @@ export default function ChatPage() {
                                         : "bg-gray-200 text-gray-900 rounded-bl-none"
                                 }`}
                             >
-                                {msg.content ===
-                                "Sorry I did not find a matching answer." ? (
-                                    <FallBackMessag />
+                                {!msg.answered && msg.role === "assistant" ? (
+                                    <FallBackMessage content={msg.content} />
                                 ) : msg.role === "assistant" ? (
                                     <Typewriter
                                         text={msg.content as string}

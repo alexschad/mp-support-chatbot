@@ -1,5 +1,5 @@
 import { OpenAI } from "openai";
-import clientPromise from "@/lib/mongodb"; // MongoDB connection helper
+import clientPromise from "@/lib/mongodb";
 import { logChatMessage } from "@/app/logChatMessage";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
             {
                 role: "system",
                 content:
-                    "You are a helpful support assistant. Only answer using the provided context. If the context doesn't include the information say:Sorry I did not find a matching answer.",
+                    "You are a helpful support assistant. Only answer using the provided context. Always respond in the same language as the question. If the context doesn't include the information say:Sorry I did not find a matching answer. If the question was asked in german say:Es tut mir leid, ich habe keine passende Antwort gefunden.",
             },
             {
                 role: "user",
@@ -59,8 +59,12 @@ export async function POST(req: Request) {
         ],
     });
     const answer = chatResponse.choices[0].message.content || "";
-    const answered = answer !== "Sorry I did not find a matching answer.";
+    const answered =
+        [
+            "Sorry I did not find a matching answer.",
+            "Es tut mir leid, ich habe keine passende Antwort gefunden.",
+        ].indexOf(answer) === -1;
     // log the question to mongodb
     logChatMessage({ question: query, answer, answered });
-    return Response.json({ answer });
+    return Response.json({ answer, answered });
 }
