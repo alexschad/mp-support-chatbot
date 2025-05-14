@@ -1,4 +1,6 @@
 import clientPromise from "@/lib/mongodb";
+import FilterAnswers from "@/app/components/FilterAnswers";
+
 const PAGE_SIZE = 10;
 
 type logEntry = {
@@ -9,31 +11,43 @@ type logEntry = {
     timestamp: Date;
 };
 
-async function fetchEntries(page: number) {
+async function fetchEntries(page: number, answered?: string) {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB_NAME);
     const collection = db.collection<logEntry>(
         process.env.MONGODB_ANSWER_COLLECTION_NAME || ""
     );
 
+    const answeredFilter =
+        answered === "answered"
+            ? true
+            : answered === "notAnswered"
+            ? false
+            : undefined;
+    const query: Partial<logEntry> = {};
+    if (answeredFilter !== undefined) {
+        query.answered = answeredFilter;
+    }
+
     const entries = await collection
-        .find({})
+        .find(query)
         .sort({ timestamp: -1 }) // Order by timestamp in descending order
         .skip((page - 1) * PAGE_SIZE)
         .limit(PAGE_SIZE)
         .toArray();
 
-    const totalEntries = await collection.countDocuments();
+    const totalEntries = await collection.countDocuments(query);
     return { entries, totalEntries };
 }
 
 export default async function Page({
     searchParams,
 }: {
-    searchParams: { page?: string };
+    searchParams: { page?: string; answered?: string };
 }) {
-    const page = parseInt(searchParams.page || "1", 10);
-    const { entries, totalEntries } = await fetchEntries(page);
+    const { page: pageString, answered } = await searchParams;
+    const page = parseInt(pageString || "1", 10);
+    const { entries, totalEntries } = await fetchEntries(page, answered);
     const totalPages = Math.ceil(totalEntries / PAGE_SIZE);
 
     return (
@@ -44,6 +58,8 @@ export default async function Page({
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                    <FilterAnswers selected={answered || "all"} />
+                    <h1 className="font-bold">{totalEntries} Questions</h1>
                     <ul className="space-y-4">
                         {entries.map((entry: logEntry) => (
                             <li
@@ -87,7 +103,9 @@ export default async function Page({
                         {Array.from({ length: totalPages }, (_, i) => (
                             <a
                                 key={i}
-                                href={`?page=${i + 1}`}
+                                href={`?page=${i + 1}${
+                                    answered ? `&answered=${answered}` : ""
+                                }`}
                                 style={{
                                     margin: "0 5px",
                                     textDecoration:
