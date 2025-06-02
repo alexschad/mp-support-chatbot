@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import useTypewriter from "@/hooks/useTypewriter";
 
 function TypingIndicator() {
@@ -17,35 +18,37 @@ function FallBackMessage({ content }: { content: string }) {
     if (content === "Sorry I did not find a matching answer.") {
         return (
             <span>
-                I&apos;m sorry, I couldn&apos;t find relevant information in the
-                documentation. You can try rephrasing your question or{" "}
+                Sorry, I couldn&apos;t find relevant information related to your
+                question as it was worded. You could try again by rephrasing
+                your question or just get help directly from our team
+                (https://support.metropublisher.com/hc/en-us/requests/new)
+                through our{" "}
                 <a
                     href="https://support.metropublisher.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-600 underline hover:text-indigo-800"
+                    className="text-mpub-blue underline hover:text-indigo-800"
                 >
-                    contact our support team
-                </a>{" "}
-                for further assistance.
+                    support site
+                </a>
+                .
             </span>
         );
     } else {
         return (
             <span>
-                Es tut mir leid, ich konnte keine relevanten Informationen in
-                der Dokumentation finden. Du kannst versuchen, deine Frage
-                anders zu formulieren oder unser Support-Team für weitere Hilfe
-                zu{" "}
+                Leider konnte ich zu Ihrer Frage keine relevanten Informationen
+                finden. Sie können es erneut versuchen, indem Sie Ihre Frage
+                umformulieren, oder sich direkt über unsere{" "}
                 <a
                     href="https://support.metropublisher.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-indigo-600 underline hover:text-indigo-800"
+                    className="text-mpub-blue underline hover:text-indigo-800"
                 >
-                    kontaktieren
-                </a>
-                .
+                    Support-Website
+                </a>{" "}
+                an unser Team wenden.
             </span>
         );
     }
@@ -128,10 +131,24 @@ export default function ChatPage() {
     }, [messages, isLoading]);
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
-            <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
-                <div className="px-6 py-4 bg-indigo-600 text-white font-semibold text-lg">
-                    Metropublisher Support Chat
+        <div className="min-h-screen flex flex-col items-center py-10 px-4">
+            <div className="w-full max-w-2xl shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
+                <div className="px-6 py-4 bg-mpub-blue text-white font-semibold text-lg">
+                    <span
+                        style={{
+                            display: "inline-block",
+                            verticalAlign: "middle",
+                            marginRight: "10px",
+                        }}
+                    >
+                        <Image
+                            src="/images/logo.svg"
+                            alt="Metropublisher"
+                            width={40}
+                            height={40}
+                        />
+                    </span>
+                    Support Chatbot
                 </div>
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[60vh]">
@@ -147,7 +164,7 @@ export default function ChatPage() {
                             <div
                                 className={`px-4 py-2 rounded-lg max-w-xs ${
                                     msg.role === "user"
-                                        ? "bg-indigo-500 text-white rounded-br-none"
+                                        ? "bg-blue-400 text-white rounded-br-none"
                                         : "bg-gray-200 text-gray-900 rounded-bl-none"
                                 }`}
                             >
@@ -177,10 +194,10 @@ export default function ChatPage() {
                     <div ref={chatEndRef} />
                 </div>
 
-                <div className="p-4 border-t flex gap-2 bg-white">
+                <div className="p-4 border-t flex gap-2">
                     <input
                         type="text"
-                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                         placeholder="Type your message..."
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
@@ -192,7 +209,7 @@ export default function ChatPage() {
                         className={`px-4 py-2 rounded-lg text-white transition ${
                             isLoading
                                 ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-indigo-600 hover:bg-indigo-700"
+                                : "bg-mpub-blue hover:bg-mpub-blue"
                         }`}
                         disabled={isLoading}
                     >
