@@ -57,7 +57,7 @@ export default async function Page({
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
-            <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
+            <div className="w-full max-w-2xl shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
                 <div className="px-6 py-4 bg-indigo-600 text-white font-semibold text-lg">
                     Metropublisher Support Chat Logs
                 </div>
