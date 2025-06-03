@@ -3,11 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --user-chat-bg: #e5e7eb;
+  --user-chat-text: #000000;
+  --bot-chat-bg: #50a2ff;
+  --bot-chat-text: #ffffff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-user-chat-bg: var(--user-chat-bg);
+  --color-user-chat-text: var(--user-chat-text);
+  --color-bot-chat-bg: var(--bot-chat-bg);
+  --color-bot-chat-text: var(--bot-chat-text);
   --color-mpub-blue: #074090;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -17,6 +25,11 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --user-chat-bg: #353535;
+    --user-chat-text: #ffffff;
+    --bot-chat-bg: #143152;
+    --bot-chat-text: #ffffff;
+
   }
 }
 

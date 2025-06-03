@@ -20,14 +20,13 @@ function FallBackMessage({ content }: { content: string }) {
             <span>
                 Sorry, I couldn&apos;t find relevant information related to your
                 question as it was worded. You could try again by rephrasing
-                your question or just get help directly from our team
-                (https://support.metropublisher.com/hc/en-us/requests/new)
-                through our{" "}
+                your question or just get help directly from our team through
+                our{" "}
                 <a
                     href="https://support.metropublisher.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-mpub-blue underline hover:text-indigo-800"
+                    className="text-blue-500 underline hover:text-indigo-800"
                 >
                     support site
                 </a>
@@ -164,8 +163,8 @@ export default function ChatPage() {
                             <div
                                 className={`px-4 py-2 rounded-lg max-w-xs ${
                                     msg.role === "user"
-                                        ? "bg-blue-400 text-white rounded-br-none"
-                                        : "bg-gray-200 text-gray-900 rounded-bl-none"
+                                        ? "bg-bot-chat-bg text-bot-chat-text rounded-br-none"
+                                        : "bg-user-chat-bg text-user-chat-text rounded-bl-none"
                                 }`}
                             >
                                 {!msg.answered && msg.role === "assistant" ? (
@@ -208,7 +207,7 @@ export default function ChatPage() {
                         onClick={sendMessage}
                         className={`px-4 py-2 rounded-lg text-white transition ${
                             isLoading
-                                ? "bg-gray-400 cursor-not-allowed"
+                                ? "bg-mpub-blue cursor-not-allowed"
                                 : "bg-mpub-blue hover:bg-mpub-blue"
                         }`}
                         disabled={isLoading}
