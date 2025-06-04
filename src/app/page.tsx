@@ -4,6 +4,9 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import useTypewriter from "@/hooks/useTypewriter";
 
+const startingMessages =
+    "Hello, do you have questions about Metro Publisher? I'm an AI bot that can help you find answers. Just type your question below and I'll do my best to assist you.";
+
 function TypingIndicator() {
     return (
         <div className="flex gap-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none">
@@ -73,7 +76,7 @@ const Typewriter = ({
 
     return (
         <div className="flex justify-start">
-            <div className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap break-words overflow-hidden w-full whitespace-normal">
+            <div className="p-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap break-words overflow-hidden w-full whitespace-normal">
                 {displayText}
             </div>
         </div>
@@ -83,7 +86,7 @@ const Typewriter = ({
 export default function ChatPage() {
     const [messages, setMessages] = useState<
         { role: string; content: string; answered: boolean }[]
-    >([]);
+    >([{ role: "assistant", content: startingMessages, answered: true }]);
     const [isLoading, setIsLoading] = useState(false);
     const [input, setInput] = useState("");
     const chatEndRef = useRef<HTMLDivElement>(null);
@@ -130,8 +133,8 @@ export default function ChatPage() {
     }, [messages, isLoading]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center py-10 px-4">
-            <div className="w-full max-w-2xl shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
+        <div className="h-full flex flex-col items-center px-4 pt-6 bg-transparent">
+            <div className="h-full w-full max-w-2xl shadow-xl rounded-2xl flex flex-col overflow-hidden border border-gray-200">
                 <div className="px-6 py-4 bg-mpub-blue text-white font-semibold text-lg">
                     <span
                         style={{
@@ -150,7 +153,7 @@ export default function ChatPage() {
                     Support Chatbot
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[60vh]">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background">
                     {messages.map((msg, idx) => (
                         <div
                             key={idx}
@@ -161,7 +164,7 @@ export default function ChatPage() {
                             }`}
                         >
                             <div
-                                className={`px-4 py-2 rounded-lg max-w-xs ${
+                                className={`p-2 rounded-lg max-w-xs ${
                                     msg.role === "user"
                                         ? "bg-bot-chat-bg text-bot-chat-text rounded-br-none"
                                         : "bg-user-chat-bg text-user-chat-text rounded-bl-none"
@@ -193,7 +196,7 @@ export default function ChatPage() {
                     <div ref={chatEndRef} />
                 </div>
 
-                <div className="p-4 border-t flex gap-2">
+                <div className="p-4 border-t flex gap-2 bg-background">
                     <input
                         type="text"
                         className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
