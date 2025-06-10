@@ -5,7 +5,7 @@
   --foreground: #171717;
   --user-chat-bg: #e5e7eb;
   --user-chat-text: #000000;
-  --bot-chat-bg: #50a2ff;
+  --bot-chat-bg: #328fe3;
   --bot-chat-text: #ffffff;
 }
 
@@ -17,6 +17,7 @@
   --color-bot-chat-bg: var(--bot-chat-bg);
   --color-bot-chat-text: var(--bot-chat-text);
   --color-mpub-blue: #074090;
+  --color-mpub-lt-blue: #328fe3;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
