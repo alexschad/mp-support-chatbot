@@ -52,7 +52,7 @@ const Typewriter = ({
 
     return (
         <div className="flex justify-start">
-            <div className="p-2 bg-gray-200 text-gray-900 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap break-words overflow-hidden w-full whitespace-normal">
+            <div className="p-2 rounded-lg max-w-xs rounded-bl-none whitespace-pre-wrap break-words overflow-hidden w-full whitespace-normal">
                 {displayText}
             </div>
         </div>
@@ -195,10 +195,10 @@ export default function Chat({ translation }: { translation: Translation }) {
                     />
                     <button
                         onClick={sendMessage}
-                        className={`px-4 py-2 rounded-lg text-white transition ${
+                        className={`px-4 py-2 rounded-lg text-white transition bg-mpub-lt-blue ${
                             isLoading
-                                ? "bg-mpub-blue cursor-not-allowed"
-                                : "bg-mpub-blue hover:bg-mpub-blue"
+                                ? "cursor-not-allowed"
+                                : "hover:bg-mpub-blue"
                         }`}
                         disabled={isLoading}
                     >

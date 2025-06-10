@@ -53,7 +53,7 @@ const translations: Record<Locale, Translation> = {
                     href="https://support.metropublisher.com/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-mpub-blue underline hover:text-indigo-800"
+                    className="text-mpub-lt-blue underline hover:text-indigo-800"
                 >
                     Support-Website
                 </a>{" "}
